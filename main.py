@@ -1,7 +1,7 @@
 
 import pygame
 import time
-from util import Text
+from util import Text, ProgressBar
 import settings
 
 class Word:
@@ -32,6 +32,7 @@ class Game:
 
 
         self.current_word: str = ''
+        self.round_timer = ProgressBar(self.canvas, pygame.Color('gold1'),60,[10,10])
 
 
     def run_game(self) -> None:
@@ -109,7 +110,7 @@ class Game:
             case 0:
                 self.draw_title()
             case 1:
-                pass
+                self.round_timer.draw()
             case 2:
                 self.draw_gameover()
  
