@@ -1,5 +1,6 @@
 
-import pygame, time
+import pygame
+import time
 from util import Text
 import settings
 
@@ -36,8 +37,10 @@ class Game:
     def run_game(self) -> None:
         previous_time = time.time()
         while self.is_running:
-            dt = time.time() - previous_time
-            dt *= 60
+            now = time.time()
+            dt = now - previous_time
+            previous_time = now
+            ##dt *= 60
             self.update(dt)
             self.draw()
     

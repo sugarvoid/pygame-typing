@@ -19,5 +19,21 @@ def import_cvs_layout(cvs_path:str) -> list:
             layer_data.append(list(row))
         return layer_data
 
+class ProgressBar():
 
+    
 
+    def __init__(self, surface, color, max_val, pos:tuple) -> None:
+        self.surface = surface
+        self.color = color
+        self.pos = pos
+        self.max_val = max_val
+        self.current_val = max_val
+        self.bar_length = 400
+        self.bar_ratio = self.max_val / self.bar_length
+    
+    def update(self):
+        pass
+    
+    def draw(self):
+        pygame.draw.rect(self.surface, self.color, (self.pos[0],self.pos[1])
