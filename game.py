@@ -4,6 +4,30 @@ from util import Text, ProgressBar
 import settings
 
 
+word_list: list = []
+
+
+#TODO: Load txt list into a python list. So you don't need to load it each time?
+def search_for_word(word:str) -> bool:
+    has_word: bool 
+    for w in word_list:
+        if w == word:
+            has_word = True
+            break
+        else:
+            has_word = False
+    return has_word
+
+
+def load_words() -> None:
+    myfile = open("word_list.txt", "r")
+    while myfile:
+        line  = myfile.readline()
+        if line != "":
+            word_list.append(line.strip('\n'))
+        else:
+            break
+    myfile.close() 
 
 
 class Game:
@@ -17,6 +41,8 @@ class Game:
         self.screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))
         pygame.display.set_caption(settings.title)
 
+        load_words()
+        print(search_for_word('widget'))
 
         self.title_text = pygame.sprite.Group()
         self.game_text = pygame.sprite.Group()
@@ -60,7 +86,7 @@ class Game:
                 case 1:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
-                            pass
+                            print(f'submitting {self.current_word}.')
                         elif event.key == pygame.K_BACKSPACE:
                             pass
                         else:
