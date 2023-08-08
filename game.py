@@ -1,6 +1,7 @@
 import pygame
 import time
 from util import Text, ProgressBar
+from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_COLOR
 import settings
 
 
@@ -37,9 +38,9 @@ class Game:
         self.clock: pygame.Clock = pygame.time.Clock()
         self.is_running: bool = True
         self.state: int = 0 # 0=title, 1=play, 2=game_over
-        self.canvas = pygame.Surface((settings.game_screen.x,settings.game_screen.y))
-        self.screen = pygame.display.set_mode((settings.screen_width, settings.screen_height))
-        pygame.display.set_caption(settings.title)
+        self.canvas = pygame.Surface((GAME_SCREEN.x,GAME_SCREEN.y))
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption(TITLE)
 
         load_words()
         print(search_for_word('widget'))
@@ -57,8 +58,8 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        self.title_text.add(Text("Hello", "green", (0, 0)))
-        self.title_text.add(Text("World!", "white", (0, 50)))
+        self.title_text.add(Text("Game", "green", (0, 0)))
+        self.title_text.add(Text("Title", "white", (0, 50)))
 
         # Gameplay
 
@@ -120,7 +121,7 @@ class Game:
             case 2: #Gameover
                 self.update_gameover(dt)
         pygame.display.flip()  # Refresh on-screen display
-        self.clock.tick(settings.FPS) # wait until next frame (at 60 FPS)
+        self.clock.tick(FPS) # wait until next frame (at 60 FPS)
 
     
     def update_title(self) -> None:
@@ -138,7 +139,7 @@ class Game:
 #region DRAW_FUNCTIONS
 
     def draw(self):
-        self.canvas.fill(settings.bg_color)
+        self.canvas.fill(BG_COLOR)
         match self.state:
             case 0:
                 self.draw_title()
@@ -148,16 +149,11 @@ class Game:
                 self.draw_gameover()
  
 
-        self.screen.blit(
-            pygame.transform.scale(
-                self.canvas,
-               (settings.screen_width,settings.screen_height)), (0,0))
+        self.screen.blit(pygame.transform.scale(self.canvas,(SCREEN_WIDTH,SCREEN_HEIGHT)),(0,0))
         
             
     
     def draw_title(self) -> None:
-
-        
         self.title_text.draw(self.canvas)
 
     def draw_play(self) -> None:

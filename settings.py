@@ -1,11 +1,11 @@
 from pygame import Vector2
 
-tile_size = 8
-game_screen = Vector2(128,128)
+TILE_SIZE = 8
+GAME_SCREEN = Vector2(128,128)
 
 
-title = 'Pygame - Typing'
-scale = 6
-screen_width, screen_height = (game_screen.x*scale, game_screen.y*scale)
-bg_color = (0, 0, 0)
+TITLE = 'Pygame - Typing'
+SCALE = 6
+SCREEN_WIDTH, SCREEN_HEIGHT = (GAME_SCREEN.x*SCALE, GAME_SCREEN.y*SCALE)
+BG_COLOR = (0, 0, 0)
 FPS = 60
