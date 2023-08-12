@@ -5,7 +5,9 @@ from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_CO
 import settings
 
 
+LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
 word_list: list = []
+used_words: list = []
 
 
 #TODO: Load txt list into a python list. So you don't need to load it each time?
@@ -58,11 +60,12 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        self.title_text.add(Text("Game", "green", (0, 0)))
+        print(SCREEN_WIDTH/2)
+        self.title_text.add(Text("Game", "green", (100, 0)))
         self.title_text.add(Text("Title", "white", (0, 50)))
 
         # Gameplay
-
+        self.game_text.add(Text('', "yellow", (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)))
         # Game Over
 
 
@@ -80,10 +83,12 @@ class Game:
         for event in pygame.event.get():
             self._check_for_quit(event)
             match self.state:
-                case 0:
+                case 0: # Title Screen
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
+                            self.title_text.empty()
                             self.state = 1
+
                 case 1:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
@@ -92,12 +97,16 @@ class Game:
                             pass
                         else:
                             key_pressed = event.unicode.upper()
-                            if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
+                            if key_pressed in LETTERS and key_pressed != "":
                                 print(key_pressed)
                                 self.current_word += key_pressed
                                 print(f'Current word: {self.current_word}')
+
                 case 2:
-                    pass
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_r:
+                            # TODO: Restart game
+                            print('Restart the game')
 
 
     def _check_for_quit(self, event) -> None:
@@ -130,6 +139,7 @@ class Game:
 
     def update_play(self, dt) -> None:
         self.round_timer.update(dt)
+        
     
 
     def update_gameover(self, dt) -> None:

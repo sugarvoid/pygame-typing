@@ -9,6 +9,7 @@ class Text(pygame.sprite.Sprite):
         self.font = pygame.font.Font('./font/monogram.ttf', 16)
         self.image = self.font.render(text, False, color)
         self.rect = self.image.get_rect(topleft = center_pos)
+    
 
 
 def import_cvs_layout(cvs_path:str) -> list:
@@ -37,6 +38,7 @@ class ProgressBar():
     def update(self, dt):
         self.bar_length -= 1 * dt
         self.rect.width = self.bar_length
+        # print(int(self.bar_length))
     
     def draw(self):
         pygame.draw.rect(self.surface, self.under_color, self.rect_under)
