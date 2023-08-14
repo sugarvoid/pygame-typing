@@ -3,39 +3,21 @@ import time
 from util import Text, ProgressBar
 from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_COLOR
 import settings
+from math_func import clamp
+from label import Label
 
 
 LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
-word_list: list = []
-used_words: list = []
-
-
-#TODO: Load txt list into a python list. So you don't need to load it each time?
-def search_for_word(word:str) -> bool:
-    has_word: bool 
-    for w in word_list:
-        if w == word:
-            has_word = True
-            break
-        else:
-            has_word = False
-    return has_word
-
-
-def load_words() -> None:
-    myfile = open("word_list.txt", "r")
-    while myfile:
-        line  = myfile.readline()
-        if line != "":
-            word_list.append(line.strip('\n'))
-        else:
-            break
-    myfile.close() 
 
 
 class Game:
     def __init__(self) -> None:
         pygame.init()
+
+        self.MAX_WORD_LENGTH: int = 15
+        self.word_list: list = []
+        self.used_words: list = []
+
         self.dt: float = 0
         self.clock: pygame.Clock = pygame.time.Clock()
         self.is_running: bool = True
@@ -44,8 +26,8 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption(TITLE)
 
-        load_words()
-        print(search_for_word('widget'))
+        self.load_words()
+        print(self.search_for_word('widget'))
 
         self.title_text = pygame.sprite.Group()
         self.game_text = pygame.sprite.Group()
@@ -64,10 +46,34 @@ class Game:
         self.title_text.add(Text("Game", "green", (100, 0)))
         self.title_text.add(Text("Title", "white", (0, 50)))
 
+        #self.lbl_current_word = Label(self.canvas, "Ciao a tutti", 10, 10,12) # out of loop
+
+
         # Gameplay
-        self.game_text.add(Text('', "yellow", (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)))
+        self.game_text.add(Text('hello?', "yellow", (50, 50)))
         # Game Over
 
+
+    #TODO: Load txt list into a python list. So you don't need to load it each time?
+    def search_for_word(self, word:str) -> bool:
+        has_word: bool 
+        for w in self.word_list:
+            if w == word:
+                has_word = True
+                break
+            else:
+                has_word = False
+        return has_word
+
+    def load_words(self) -> None:
+        myfile = open("word_list.txt", "r")
+        while myfile:
+            line  = myfile.readline()
+            if line != "":
+                self.word_list.append(line.strip('\n'))
+            else:
+                break
+        myfile.close() 
 
     def run_game(self) -> None:
         previous_time = time.time()
@@ -118,7 +124,7 @@ class Game:
                 #exit()
                 self.is_running = False
 
-#region UPDATE_FUNTIONS 
+#region UPDATE_FUNCTIONS 
     def update(self, dt):
         self._get_input()
 
@@ -155,6 +161,8 @@ class Game:
                 self.draw_title()
             case 1:
                 self.round_timer.draw()
+                self.game_text.draw(self.canvas)
+               # self.lbl_current_word.draw()
             case 2:
                 self.draw_gameover()
  
