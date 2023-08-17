@@ -1,7 +1,7 @@
 from pygame import Vector2
 
-TILE_SIZE = 8
-GAME_SCREEN = Vector2(128,128)
+
+GAME_SCREEN: Vector2 = Vector2(800,600)
 
 
 TITLE = 'Pygame - Typing'

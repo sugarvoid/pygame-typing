@@ -9,6 +9,8 @@ from label import Label
 
 LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
 
+DEBUG: bool = False
+
 
 class Game:
     def __init__(self) -> None:
@@ -23,11 +25,10 @@ class Game:
         self.is_running: bool = True
         self.state: int = 0 # 0=title, 1=play, 2=game_over
         self.canvas = pygame.Surface((GAME_SCREEN.x,GAME_SCREEN.y))
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen = pygame.display.set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
         pygame.display.set_caption(TITLE)
 
         self.load_words()
-        print(self.search_for_word('widget'))
 
         self.title_text = pygame.sprite.Group()
         self.game_text = pygame.sprite.Group()
@@ -43,14 +44,14 @@ class Game:
     def _add_text(self) -> None:
         # Title
         print(SCREEN_WIDTH/2)
-        self.title_text.add(Text("Game", "green", (100, 0)))
-        self.title_text.add(Text("Title", "white", (0, 50)))
+        self.title_text.add(Text("Game", "green",72, (100, 0)))
+        self.title_text.add(Text("Title", "white",72, (0, 50)))
 
         #self.lbl_current_word = Label(self.canvas, "Ciao a tutti", 10, 10,12) # out of loop
 
 
         # Gameplay
-        self.game_text.add(Text('hello?', "yellow", (50, 50)))
+        self.game_text.add(Text('hello?', "yellow",124, (50, 50)))
         # Game Over
 
 
@@ -167,7 +168,7 @@ class Game:
                 self.draw_gameover()
  
 
-        self.screen.blit(pygame.transform.scale(self.canvas,(SCREEN_WIDTH,SCREEN_HEIGHT)),(0,0))
+        self.screen.blit(self.canvas,(0,0))
         
             
     
