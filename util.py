@@ -4,9 +4,9 @@ from csv import reader
 #font = pygame.font.Font('./font/monogram.ttf', 24)
 
 class Text(pygame.sprite.Sprite):
-    def __init__(self, text:str, color:str, center_pos=(0,0)):
+    def __init__(self, text:str, color:str, size:int, center_pos=(0,0)):
         super().__init__() 
-        self.font = pygame.font.Font('./font/monogram.ttf', 16)
+        self.font = pygame.font.Font('./font/monogram.ttf', size)
         self.image = self.font.render(text, False, color)
         self.rect = self.image.get_rect(topleft = center_pos)
     
@@ -30,12 +30,13 @@ class ProgressBar():
         
         self.max_val = max_val
         self.current_val = max_val
-        self.bar_length = 50
+        self.bar_length = 200
         self.bar_ratio = self.max_val / self.bar_length
-        self.rect = pygame.Rect(pos[0], pos[1], self.bar_length, 4)
-        self.rect_under = pygame.Rect(pos[0], pos[1], self.bar_length, 4)
+        self.rect = pygame.Rect(pos[0], pos[1], self.bar_length, 30)
+        self.rect_under = pygame.Rect(pos[0], pos[1], self.bar_length, 30)
     
     def update(self, dt):
+        
         self.bar_length -= 1 * dt
         self.rect.width = self.bar_length
         # print(int(self.bar_length))
