@@ -30,7 +30,7 @@ class ProgressBar():
         
         self.max_val = max_val
         self.current_val = max_val
-        self.bar_length = 200
+        self.bar_length = 100
         self.bar_ratio = self.max_val / self.bar_length
         self.rect = pygame.Rect(pos[0], pos[1], self.bar_length, 30)
         self.rect_under = pygame.Rect(pos[0], pos[1], self.bar_length, 30)

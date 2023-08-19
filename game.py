@@ -80,10 +80,11 @@ class Game:
         previous_time = time.time()
         while self.is_running:
             now = time.time()
-            dt = now - previous_time
-            previous_time = now
+            dt = self.clock.tick(60)/1000.0
+            #previous_time = now
             ##dt *= 60
             self.update(dt)
+            print(dt)
             self.draw()
     
     def _get_input(self) -> None:
@@ -137,7 +138,7 @@ class Game:
             case 2: #Gameover
                 self.update_gameover(dt)
         pygame.display.flip()  # Refresh on-screen display
-        self.clock.tick(FPS) # wait until next frame (at 60 FPS)
+        ### self.clock.tick(FPS) # wait until next frame (at 60 FPS)
 
     
     def update_title(self) -> None:
