@@ -43,7 +43,6 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        print(SCREEN_WIDTH/2)
         self.title_text.add(Text("Game", "green",72, (100, 0)))
         self.title_text.add(Text("Title", "white",72, (0, 50)))
 
@@ -77,14 +76,9 @@ class Game:
         myfile.close() 
 
     def run_game(self) -> None:
-        previous_time = time.time()
         while self.is_running:
-            now = time.time()
             dt = self.clock.tick(60)/1000.0
-            #previous_time = now
-            ##dt *= 60
             self.update(dt)
-            print(dt)
             self.draw()
     
     def _get_input(self) -> None:
