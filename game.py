@@ -4,12 +4,16 @@ from util import Text, ProgressBar
 from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_COLOR
 import settings
 from math_func import clamp
+from os import path, remove
 from label import Label
+from timer import Timer
 
 
 LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
 
 DEBUG: bool = False
+USED_WORDS_FILE: str = 'word_history.txt'
+CENTER_TEXT_POS = (300, 300)
 
 
 class Game:
@@ -19,6 +23,16 @@ class Game:
         self.MAX_WORD_LENGTH: int = 15
         self.word_list: list = []
         self.used_words: list = []
+
+        self.test_timer: Timer = Timer(5)
+        
+
+        if DEBUG:
+            print('debug on')
+            if path.exists(USED_WORDS_FILE):
+                remove(USED_WORDS_FILE)
+            else:
+                print("The file does not exist") 
 
         self.dt: float = 0
         self.clock: pygame.Clock = pygame.time.Clock()
@@ -39,14 +53,14 @@ class Game:
 
 
         self.current_word: str = ''
-        self.round_timer = ProgressBar(self.canvas, pygame.Color('gold1'),60,[10,10])
+        self.round_timer = ProgressBar(self.canvas, pygame.Color('gold1'),80,[10,10], None)
 
     def _add_text(self) -> None:
         # Title
         self.title_text.add(Text("Game", "green",72, (100, 0)))
         self.title_text.add(Text("Title", "white",72, (0, 50)))
 
-        #self.lbl_current_word = Label(self.canvas, "Ciao a tutti", 10, 10,12) # out of loop
+        self.lbl_current_word = Label(self.canvas, "Ciao a tutti", 100, 200,42) # out of loop
 
 
         # Gameplay
@@ -90,6 +104,7 @@ class Game:
                         if event.key == pygame.K_SPACE:
                             self.title_text.empty()
                             self.state = 1
+                            self.test_timer.start()
 
                 case 1:
                     if event.type == pygame.KEYDOWN:
@@ -140,7 +155,10 @@ class Game:
 
 
     def update_play(self, dt) -> None:
+        self.test_timer.update(dt)
         self.round_timer.update(dt)
+        self.lbl_current_word.change_text(self.current_word)
+        self.lbl_current_word.change_location(CENTER_TEXT_POS)
         
     
 
@@ -158,7 +176,7 @@ class Game:
             case 1:
                 self.round_timer.draw()
                 self.game_text.draw(self.canvas)
-               # self.lbl_current_word.draw()
+                self.lbl_current_word.draw()
             case 2:
                 self.draw_gameover()
  
