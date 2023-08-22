@@ -8,18 +8,21 @@ from pygame.sprite import Group
 class Label:
     
     def __init__(self, screen, text, x, y, size, color="white", group=Group):
-        
+        self.x = x
+        self.y = y
         self.font = SysFont("Arial", size)
         self.color = color
         self.image = self.font.render(text, 1, self.color).convert_alpha()
         _, _, self.w, self.h = self.image.get_rect()
-        self.rect = Rect(x, y, self.w, self.h)
+        self.rect = Rect(self.x, self.y, self.w, self.h)
         self.screen = screen
         self.text = text
         #group.append(self)
 
     def change_text(self, new_text):
         self.image = self.font.render(new_text, 1, self.color).convert_alpha()
+        _, _, self.w, self.h = self.image.get_rect()
+        
 
     def change_location(self, pos:tuple):
         _, _, w, h = self.image.get_rect()
@@ -31,6 +34,10 @@ class Label:
 
     def draw(self):
         self.screen.blit(self.image, (self.rect))
+    
+    def recenter(self):
+        self.rect = Rect(self.x, self.y, self.w, self.h)
+        self.rect.center = ()
 
 
 '''     when you import this module

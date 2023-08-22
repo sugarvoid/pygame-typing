@@ -1,4 +1,5 @@
 import pygame
+from pygame import K_SPACE
 import time
 from util import Text, ProgressBar
 from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_COLOR
@@ -114,7 +115,9 @@ class Game:
                             pass
                         else:
                             key_pressed = event.unicode.upper()
-                            if key_pressed in LETTERS and key_pressed != "":
+                            if key_pressed in LETTERS and \
+                                  key_pressed != "" and \
+                                    len(self.current_word) <= self.MAX_WORD_LENGTH:
                                 print(key_pressed)
                                 self.current_word += key_pressed
                                 print(f'Current word: {self.current_word}')
@@ -159,6 +162,7 @@ class Game:
         self.round_timer.update(dt)
         self.lbl_current_word.change_text(self.current_word)
         self.lbl_current_word.change_location(CENTER_TEXT_POS)
+        print(self.lbl_current_word.w)
         
     
 
