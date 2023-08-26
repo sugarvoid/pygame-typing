@@ -24,6 +24,8 @@ class Game:
         self.MAX_WORD_LENGTH: int = 15
         self.word_list: list = []
         self.used_words: list = []
+        self.used_words_txt = open(USED_WORDS_FILE, 'a+')
+        self.valid_words: list = self.load_words('word_list.txt')
 
         self.test_timer: Timer = Timer(5)
         
@@ -43,7 +45,7 @@ class Game:
         self.screen = pygame.display.set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
         pygame.display.set_caption(TITLE)
 
-        self.load_words()
+        self.load_words('word_list.txt')
 
         self.title_text = pygame.sprite.Group()
         self.game_text = pygame.sprite.Group()
@@ -80,15 +82,36 @@ class Game:
                 has_word = False
         return has_word
 
-    def load_words(self) -> None:
-        myfile = open("word_list.txt", "r")
+    def load_words(self, file_name) -> list:
+        word_list = []
+        myfile = open(file_name, "r")
         while myfile:
             line  = myfile.readline()
             if line != "":
-                self.word_list.append(line.strip('\n'))
+                word_list.append(line.strip('\n'))
             else:
                 break
         myfile.close() 
+        return word_list
+
+
+    def is_new_word(self, word: str) -> bool:
+        used_words = self.load_words(USED_WORDS_FILE)
+        if used_words.count(word) == 0:
+            return True
+        else:
+            return False
+
+    def is_valid_word(self, word:str) -> bool:
+        has_word: bool = False
+        for w in self.valid_words:
+            if w == word:
+                has_word = True
+                break
+            else:
+                has_word = False
+        # print(f'{word}: {has_word}')
+        return has_word
 
     def run_game(self) -> None:
         while self.is_running:
@@ -111,6 +134,8 @@ class Game:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
                             print(f'submitting {self.current_word}.')
+                            # TODO: Submit word()
+                            self.current_word = ''
                         elif event.key == pygame.K_BACKSPACE:
                             pass
                         else:
