@@ -63,11 +63,14 @@ class Game:
         self.title_text.add(Text("Game", "green",72, (100, 0)))
         self.title_text.add(Text("Title", "white",72, (0, 50)))
 
-        self.lbl_current_word = Label(self.canvas, "Ciao a tutti", 100, 200,42) # out of loop
-
+        #self.lbl_current_word = Label(self.canvas, "Ciao a tutti", 10, 200, 124) # out of loop
+        self.lbl_current_word = Text('', 'yellow', 124, (50,50))
 
         # Gameplay
-        self.game_text.add(Text('hello?', "yellow",124, (50, 50)))
+        
+        text = Text('hello?', "yellow",124, (50, 50))
+        self.game_text.add(self.lbl_current_word)
+        text.change_text('goodbye')
         # Game Over
 
 
@@ -186,7 +189,6 @@ class Game:
         self.test_timer.update(dt)
         self.round_timer.update(dt)
         self.lbl_current_word.change_text(self.current_word)
-        self.lbl_current_word.change_location(CENTER_TEXT_POS)
         print(self.lbl_current_word.w)
         
     
@@ -205,7 +207,7 @@ class Game:
             case 1:
                 self.round_timer.draw()
                 self.game_text.draw(self.canvas)
-                self.lbl_current_word.draw()
+                #self.lbl_current_word.draw()
             case 2:
                 self.draw_gameover()
  

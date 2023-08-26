@@ -1,6 +1,6 @@
 #import pygame
 from pygame import Rect
-from pygame.font import SysFont
+from pygame.font import SysFont, Font
 from pygame.sprite import Group
 
 
@@ -10,9 +10,10 @@ class Label:
     def __init__(self, screen, text, x, y, size, color="white", group=Group):
         self.x = x
         self.y = y
-        self.font = SysFont("Arial", size)
+        #self.font = SysFont("Arial", size)
+        self.font = Font('./font/monogram.ttf', size)
         self.color = color
-        self.image = self.font.render(text, 1, self.color).convert_alpha()
+        self.image = self.font.render(text, True, self.color).convert_alpha()
         _, _, self.w, self.h = self.image.get_rect()
         self.rect = Rect(self.x, self.y, self.w, self.h)
         self.screen = screen
@@ -29,7 +30,7 @@ class Label:
         self.rect = Rect(pos[0],pos[1], self.w, self.h)
 
     def change_font(self, font, size):
-        self.font = SysFont(font, size)
+        self.font = Font(font, size)
         self.change_text(self.text)
 
     def draw(self):
