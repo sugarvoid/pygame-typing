@@ -1,4 +1,5 @@
 import pygame
+from pygame import K_SPACE
 import time
 from pygame import init
 from pygame.sprite import Group
@@ -24,6 +25,8 @@ class Game:
         self.MAX_WORD_LENGTH: int = 15
         self.word_list: list = []
         self.used_words: list = []
+        self.used_words_txt = open(USED_WORDS_FILE, 'a+')
+        self.valid_words: list = self.load_words('word_list.txt')
 
         self.test_timer: Timer = Timer(5)
         
@@ -44,9 +47,13 @@ class Game:
         pygame.display.set_caption(TITLE)
 
 
+
         self.TEST_TEXT: Text = Text("TEST", "red",80, (100, 300))
 
         self.load_words()
+
+        self.load_words('word_list.txt')
+
 
         self.title_text = Group()
         self.game_text = pygame.sprite.Group()
@@ -61,6 +68,7 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
+
         self.title_text.add(Text("Typing", "white",72, (100, 100)))
         self.title_text.add(Text("Game", "white",72, (100, 150)))
         self.title_text.add(Text("Press Space", "white",72, (100, 350)))
@@ -69,6 +77,9 @@ class Game:
 
         # Gameplay
         self.game_text.add(self.TEST_TEXT)
+    
+
+        # Gameplay
         
         # Game Over
 
@@ -84,15 +95,36 @@ class Game:
                 has_word = False
         return has_word
 
-    def load_words(self) -> None:
-        myfile = open("word_list.txt", "r")
+    def load_words(self, file_name) -> list:
+        word_list = []
+        myfile = open(file_name, "r")
         while myfile:
             line  = myfile.readline()
             if line != "":
-                self.word_list.append(line.strip('\n'))
+                word_list.append(line.strip('\n'))
             else:
                 break
         myfile.close() 
+        return word_list
+
+
+    def is_new_word(self, word: str) -> bool:
+        used_words = self.load_words(USED_WORDS_FILE)
+        if used_words.count(word) == 0:
+            return True
+        else:
+            return False
+
+    def is_valid_word(self, word:str) -> bool:
+        has_word: bool = False
+        for w in self.valid_words:
+            if w == word:
+                has_word = True
+                break
+            else:
+                has_word = False
+        # print(f'{word}: {has_word}')
+        return has_word
 
     def run_game(self) -> None:
         while self.is_running:
@@ -115,11 +147,15 @@ class Game:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RETURN:
                             print(f'submitting {self.current_word}.')
+                            # TODO: Submit word()
+                            self.current_word = ''
                         elif event.key == pygame.K_BACKSPACE:
                             pass
                         else:
                             key_pressed = event.unicode.upper()
-                            if key_pressed in LETTERS and key_pressed != "":
+                            if key_pressed in LETTERS and \
+                                  key_pressed != "" and \
+                                    len(self.current_word) <= self.MAX_WORD_LENGTH:
                                 print(key_pressed)
                                 self.current_word += key_pressed
                                 print(f'Current word: {self.current_word}')
@@ -162,9 +198,13 @@ class Game:
     def update_play(self, dt) -> None:
         self.test_timer.update(dt)
         self.round_timer.update(dt)
+
         self.lbl_current_word.update_text(self.current_word)
-        self.TEST_TEXT.update_text(self.current_word)
+
         self.lbl_current_word.change_location(CENTER_TEXT_POS)
+
+        print(self.lbl_current_word.w)
+
         
     
 
@@ -182,6 +222,8 @@ class Game:
             case 1:
                 self.round_timer.draw()
                 self.game_text.draw(self.canvas)
+
+     #self.lbl_current_word.draw()
             case 2:
                 self.draw_gameover()
  

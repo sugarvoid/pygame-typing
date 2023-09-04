@@ -19,10 +19,21 @@ class Text(pygame.sprite.Sprite):
         super().__init__() 
         self.color = color
         self.font = pygame.font.Font('./font/monogram.ttf', size)
+
        
         self.image = self.font.render(text, True, self.color).convert_alpha()
         _, _, self.w, self.h = self.image.get_rect()
+
+
+
         self.rect = self.image.get_rect(topleft = center_pos)
+
+    def change_text(self, new_text):
+        self.image = self.font.render(new_text, 1, self.color).convert_alpha()
+        _, _, self.w, self.h = self.image.get_rect()
+    
+    def update_pos(self):
+        pass
     
     def update_text(self, new_text):
         self.image = self.font.render(new_text, True, self.color).convert_alpha()
