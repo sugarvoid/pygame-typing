@@ -1,15 +1,15 @@
 #import pygame
 from pygame import Rect
-from pygame.font import SysFont
+from pygame.font import SysFont, Font
 from pygame.sprite import Group
 
 
 
 class Label:
     
-    def __init__(self, screen, text, x, y, size, color="white", group=Group):
+    def __init__(self, screen, text, x, y, size, color="white", font:str='', group=Group):
         
-        self.font = SysFont("Arial", size)
+        self.font = Font(font, size)
         self.color = color
         self.image = self.font.render(text, 1, self.color).convert_alpha()
         _, _, self.w, self.h = self.image.get_rect()
