@@ -9,7 +9,7 @@ class Scene(Protocol):
         raise NotImplementedError()
     def on_exit(self):
         raise NotImplementedError()
-    def input(self, sm, inputStream):
+    def get_input(self, sm, inputStream):
         raise NotImplementedError()
     def update(self, sm, inputStream):
         raise NotImplementedError()
@@ -28,7 +28,7 @@ class SceneManager:
     def exitScene(self):
         if len(self.scenes) > 0:
             self.scenes[-1].onExit()
-    def input(self, inputStream):
+    def get_input(self, inputStream):
         if len(self.scenes) > 0:
             self.scenes[-1].input(self, inputStream)
     def update(self, inputStream):
@@ -39,19 +39,22 @@ class SceneManager:
             self.scenes[-1].draw(self, screen)
         # present screen
         flip()
-    def push(self, scene):
+
+    def add_scene(self, scene):
         self.exitScene()
         self.scenes.append(scene)
         self.enterScene()
-    def pop(self):
+
+    def remove_scene(self):
         self.exitScene()
         self.scenes.pop()
         self.enterScene()
-    def set(self, scenes):
-        # pop all scenes
+        
+    def add_scenes(self, scenes):
+        # remove_scene all scenes
         while len(self.scenes) > 0:
-            self.pop()
+            self.remove_scene()
         # add new scenes
         for s in scenes:
-            self.push(s)
+            self.add_scene(s)
 
