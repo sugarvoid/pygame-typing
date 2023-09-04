@@ -7,7 +7,8 @@ from pygame.sprite import Group
 
 class Label:
     
-    def __init__(self, screen, text, x, y, size, color="white", group=Group):
+    def __init__(self, screen, text, x, y, size, color="white", font:str='', group=Group):
+        self.font = Font(font, size)
         self.x = x
         self.y = y
         #self.font = SysFont("Arial", size)

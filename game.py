@@ -1,12 +1,13 @@
 import pygame
 from pygame import K_SPACE
 import time
+from pygame import init
+from pygame.sprite import Group
 from util import Text, ProgressBar
 from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_COLOR
-import settings
+#import settings
 from math_func import clamp
 from os import path, remove
-from label import Label
 from timer import Timer
 
 
@@ -19,7 +20,7 @@ CENTER_TEXT_POS = (300, 300)
 
 class Game:
     def __init__(self) -> None:
-        pygame.init()
+        init()
 
         self.MAX_WORD_LENGTH: int = 15
         self.word_list: list = []
@@ -45,9 +46,16 @@ class Game:
         self.screen = pygame.display.set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
         pygame.display.set_caption(TITLE)
 
+
+
+        self.TEST_TEXT: Text = Text("TEST", "red",80, (100, 300))
+
+        self.load_words()
+
         self.load_words('word_list.txt')
 
-        self.title_text = pygame.sprite.Group()
+
+        self.title_text = Group()
         self.game_text = pygame.sprite.Group()
         self.gameover_text = pygame.sprite.Group()
 
@@ -60,17 +68,19 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        self.title_text.add(Text("Game", "green",72, (100, 0)))
-        self.title_text.add(Text("Title", "white",72, (0, 50)))
 
-        #self.lbl_current_word = Label(self.canvas, "Ciao a tutti", 10, 200, 124) # out of loop
-        self.lbl_current_word = Text('', 'yellow', 124, (50,50))
+        self.title_text.add(Text("Typing", "white",72, (100, 100)))
+        self.title_text.add(Text("Game", "white",72, (100, 150)))
+        self.title_text.add(Text("Press Space", "white",72, (100, 350)))
+
+        self.lbl_current_word: Text = Text("", "red",80, (100, 300))
+
+        # Gameplay
+        self.game_text.add(self.TEST_TEXT)
+    
 
         # Gameplay
         
-        text = Text('hello?', "yellow",124, (50, 50))
-        self.game_text.add(self.lbl_current_word)
-        text.change_text('goodbye')
         # Game Over
 
 
@@ -171,11 +181,11 @@ class Game:
         self._get_input()
 
         match self.state:
-            case 0: #Title
+            case 0: # Title
                 self.update_title()
-            case 1: #Gameplay
+            case 1: # Gameplay
                 self.update_play(dt)
-            case 2: #Gameover
+            case 2: # Gameover
                 self.update_gameover(dt)
         pygame.display.flip()  # Refresh on-screen display
         ### self.clock.tick(FPS) # wait until next frame (at 60 FPS)
@@ -188,8 +198,13 @@ class Game:
     def update_play(self, dt) -> None:
         self.test_timer.update(dt)
         self.round_timer.update(dt)
-        self.lbl_current_word.change_text(self.current_word)
+
+        self.lbl_current_word.update_text(self.current_word)
+
+        self.lbl_current_word.change_location(CENTER_TEXT_POS)
+
         print(self.lbl_current_word.w)
+
         
     
 
@@ -207,7 +222,8 @@ class Game:
             case 1:
                 self.round_timer.draw()
                 self.game_text.draw(self.canvas)
-                #self.lbl_current_word.draw()
+
+     #self.lbl_current_word.draw()
             case 2:
                 self.draw_gameover()
  
