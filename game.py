@@ -1,3 +1,5 @@
+from random import randint
+import string
 import pygame
 from pygame import K_SPACE
 import time
@@ -16,10 +18,12 @@ LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
 DEBUG: bool = False
 USED_WORDS_FILE: str = 'word_history.txt'
 CENTER_TEXT_POS = (300, 300)
+LETTERS_TO_AVOID: list = ['x', 'q', 'u', 'z', 'w', 'y', 'i', 'v'] # For starting letter 
 
 
 class Game:
     def __init__(self) -> None:
+
         init()
 
         self.MAX_WORD_LENGTH: int = 15
@@ -50,14 +54,13 @@ class Game:
 
         self.TEST_TEXT: Text = Text("TEST", "red",80, (100, 300))
 
-        self.load_words()
+        
 
         self.load_words('word_list.txt')
 
 
-        self.title_text = Group()
-        self.game_text = pygame.sprite.Group()
-        self.gameover_text = pygame.sprite.Group()
+        self.create_text_groups()
+        
 
         self._add_text()
 
@@ -65,15 +68,26 @@ class Game:
 
         self.current_word: str = ''
         self.round_timer = ProgressBar(self.canvas, pygame.Color('gold1'),80,[10,10], None)
+    
+
+
+    def setup(self) -> None:
+        self.current_word = self.get_starting_letter()
+
+    def create_text_groups(self):
+        self.title_text = Group()
+        self.game_text = pygame.sprite.Group()
+        self.gameover_text = pygame.sprite.Group()
 
     def _add_text(self) -> None:
         # Title
-
         self.title_text.add(Text("Typing", "white",72, (100, 100)))
         self.title_text.add(Text("Game", "white",72, (100, 150)))
         self.title_text.add(Text("Press Space", "white",72, (100, 350)))
 
-        self.lbl_current_word: Text = Text("", "red",80, (100, 300))
+        self.lbl_current_word: Text = Text("", "red",80, (100, 350))
+
+        self.game_text.add(self.lbl_current_word)
 
         # Gameplay
         self.game_text.add(self.TEST_TEXT)
@@ -94,6 +108,17 @@ class Game:
             else:
                 has_word = False
         return has_word
+    
+    def get_starting_letter(self) -> chr:
+        usable_letter: bool = False
+
+        while not usable_letter:
+            index = randint(0, 26)
+            letter = string.ascii_lowercase[index]
+            if letter not in LETTERS_TO_AVOID:
+                usable_letter = True
+
+        return letter.upper()
 
     def load_words(self, file_name) -> list:
         word_list = []
@@ -201,7 +226,7 @@ class Game:
 
         self.lbl_current_word.update_text(self.current_word)
 
-        self.lbl_current_word.change_location(CENTER_TEXT_POS)
+        ##self.lbl_current_word.change_location(CENTER_TEXT_POS)
 
         print(self.lbl_current_word.w)
 
@@ -222,8 +247,6 @@ class Game:
             case 1:
                 self.round_timer.draw()
                 self.game_text.draw(self.canvas)
-
-     #self.lbl_current_word.draw()
             case 2:
                 self.draw_gameover()
  
