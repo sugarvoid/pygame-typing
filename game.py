@@ -73,6 +73,7 @@ class Game:
 
     def setup(self) -> None:
         self.current_word = self.get_starting_letter()
+        self.lbl_current_word.update_text(self.current_word)
 
     def create_text_groups(self):
         self.title_text = Group()
@@ -173,17 +174,17 @@ class Game:
                         if event.key == pygame.K_RETURN:
                             print(f'submitting {self.current_word}.')
                             # TODO: Submit word()
-                            self.current_word = ''
+                            self.current_word = self.current_word[-1]
                         elif event.key == pygame.K_BACKSPACE:
-                            pass
+                            if len(self.current_word) > 1:
+                                self.current_word = self.current_word[:-1]
                         else:
                             key_pressed = event.unicode.upper()
                             if key_pressed in LETTERS and \
                                   key_pressed != "" and \
                                     len(self.current_word) <= self.MAX_WORD_LENGTH:
-                                print(key_pressed)
                                 self.current_word += key_pressed
-                                print(f'Current word: {self.current_word}')
+                        self.lbl_current_word.update_text(self.current_word)
 
                 case 2:
                     if event.type == pygame.KEYDOWN:
@@ -224,7 +225,7 @@ class Game:
         self.test_timer.update(dt)
         self.round_timer.update(dt)
 
-        self.lbl_current_word.update_text(self.current_word)
+        
 
         ##self.lbl_current_word.change_location(CENTER_TEXT_POS)
 
