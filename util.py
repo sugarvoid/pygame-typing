@@ -15,21 +15,27 @@ def clamp(n, min, max):
         return n
 
 class Text(pygame.sprite.Sprite):
+    #TODO: Remove the 4 variable part and replace with rect
     def __init__(self, text:str, color:str, size:int, center_pos=(0,0)):
         super().__init__() 
         self.color = color
+        self.text = text
         self.font = pygame.font.Font('./font/monogram.ttf', size)
 
-       
-        self.image = self.font.render(text, True, self.color).convert_alpha()
+        
+        self.image = self.font.render(self.text, True, self.color).convert_alpha()
         _, _, self.w, self.h = self.image.get_rect()
-
+        self.rect = self.image.get_rect()
 
 
         self.rect = self.image.get_rect(topleft = center_pos)
 
     def change_text(self, new_text):
-        self.image = self.font.render(new_text, 1, self.color).convert_alpha()
+        if self.text == new_text:
+            return
+        self.text = new_text
+        self.image = self.font.render(self.text, 1, self.color).convert_alpha()
+        self.rect = self.image.get_rect()
         _, _, self.w, self.h = self.image.get_rect()
     
     def update_pos(self):

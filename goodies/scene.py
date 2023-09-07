@@ -13,7 +13,7 @@ class Scene(Protocol):
         raise NotImplementedError()
     def update(self, sm, inputStream):
         raise NotImplementedError()
-    def draw(self, sm, screen):
+    def render(self, sm, screen):
         raise NotImplementedError()
 
 
@@ -34,9 +34,9 @@ class SceneManager:
     def update(self, inputStream):
         if len(self.scenes) > 0:
             self.scenes[-1].update(self, inputStream)
-    def draw(self, screen):
+    def render(self, screen):
         if len(self.scenes) > 0:
-            self.scenes[-1].draw(self, screen)
+            self.scenes[-1].render(self, screen)
         # present screen
         flip()
 

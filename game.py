@@ -7,8 +7,7 @@ from pygame import init
 from pygame.sprite import Group
 from util import Text, ProgressBar
 from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_COLOR
-#import settings
-from math_func import clamp
+
 from os import path, remove
 from timer import Timer
 
@@ -114,7 +113,7 @@ class Game:
         usable_letter: bool = False
 
         while not usable_letter:
-            index = randint(0, 26)
+            index = randint(0, 25)
             letter = string.ascii_lowercase[index]
             if letter not in LETTERS_TO_AVOID:
                 usable_letter = True
