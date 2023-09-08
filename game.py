@@ -3,8 +3,8 @@ import string
 import pygame
 from pygame import init
 from pygame.sprite import Group
-from util import ProgressBar
-from goodies.text import Text, get_font_by_name
+from goodies.progress_bar import ProgressBar
+from goodies.text import Text
 from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH,\
                      GAME_SCREEN, TITLE, BG_COLOR
 
@@ -214,7 +214,7 @@ class Game:
             case 2: # Gameover
                 self.update_gameover(dt)
         pygame.display.flip()  # Refresh on-screen display
-        ### self.clock.tick(FPS) # wait until next frame (at 60 FPS)
+        self.clock.tick(FPS) # wait until next frame (at 60 FPS)
 
     
     def update_title(self) -> None:

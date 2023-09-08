@@ -10,7 +10,7 @@ init()
 class Text(Sprite):
     def __init__(self, font_name, size, text, color, pos=(0,0)):
         super().__init__() 
-        _font = Font(f'./font/{font_name}.ttf', size)
+        _font = Font(f'./asset/font/{font_name}.ttf', size)
         self.text = text
         self.font = _font
         self.color = color

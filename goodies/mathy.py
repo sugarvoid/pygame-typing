@@ -1,5 +1,5 @@
 
-# math.py 0.1.0
+# mathy.py 0.1.0
 
 def clamp(n, min, max):
     if n < min:
