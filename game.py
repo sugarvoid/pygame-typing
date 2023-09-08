@@ -1,22 +1,22 @@
 from random import randint
 import string
 import pygame
-from pygame import K_SPACE
-import time
 from pygame import init
 from pygame.sprite import Group
-from util import Text, ProgressBar
-from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, GAME_SCREEN, TITLE, BG_COLOR
+from util import ProgressBar
+from goodies.text import Text, get_font_by_name
+from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH,\
+                     GAME_SCREEN, TITLE, BG_COLOR
 
 from os import path, remove
-from timer import Timer
+from goodies.timer import Timer
 
 
 LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
 
 DEBUG: bool = False
 USED_WORDS_FILE: str = 'word_history.txt'
-CENTER_TEXT_POS = (300, 300)
+CENTER_TEXT_POS = (GAME_SCREEN.x/2, GAME_SCREEN.y/2)
 LETTERS_TO_AVOID: list = ['x', 'q', 'u', 'z', 'w', 'y', 'i', 'v'] # For starting letter 
 
 
@@ -25,7 +25,7 @@ class Game:
 
         init()
 
-        self.MAX_WORD_LENGTH: int = 15
+        self.MAX_WORD_LENGTH: int = 13
         self.word_list: list = []
         self.used_words: list = []
         self.used_words_txt = open(USED_WORDS_FILE, 'a+')
@@ -49,10 +49,6 @@ class Game:
         self.screen = pygame.display.set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
         pygame.display.set_caption(TITLE)
 
-
-
-        self.TEST_TEXT: Text = Text("TEST", "red",80, (100, 300))
-
         
 
         self.load_words('word_list.txt')
@@ -72,7 +68,8 @@ class Game:
 
     def setup(self) -> None:
         self.current_word = self.get_starting_letter()
-        self.lbl_current_word.update_text(self.current_word)
+        self.lbl_current_word.change_text(self.current_word)
+        self.lbl_current_word.rect.center = CENTER_TEXT_POS
 
     def create_text_groups(self):
         self.title_text = Group()
@@ -81,16 +78,15 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        self.title_text.add(Text("Typing", "white",72, (100, 100)))
-        self.title_text.add(Text("Game", "white",72, (100, 150)))
-        self.title_text.add(Text("Press Space", "white",72, (100, 350)))
+        self.title_text.add(Text('monogram',72, 'Typing', "white", (100, 100)))
+        self.title_text.add(Text('monogram', 72,"Game", "white", (100, 150)))
+        self.title_text.add(Text('monogram', 60, "Press Space", "white", (100, 350)))
 
-        self.lbl_current_word: Text = Text("", "red",80, (100, 350))
-
+        self.lbl_current_word: Text = Text("monogram", 150, '', "red", (80, 350))
+        self.lbl_current_word.change_location((100,30))
         self.game_text.add(self.lbl_current_word)
 
-        # Gameplay
-        self.game_text.add(self.TEST_TEXT)
+        
     
 
         # Gameplay
@@ -141,6 +137,7 @@ class Game:
             return False
 
     def is_valid_word(self, word:str) -> bool:
+        word = word.strip().lower()
         has_word: bool = False
         for w in self.valid_words:
             if w == word:
@@ -148,7 +145,6 @@ class Game:
                 break
             else:
                 has_word = False
-        # print(f'{word}: {has_word}')
         return has_word
 
     def run_game(self) -> None:
@@ -173,6 +169,10 @@ class Game:
                         if event.key == pygame.K_RETURN:
                             print(f'submitting {self.current_word}.')
                             # TODO: Submit word()
+                            if self.is_valid_word(self.current_word):
+                                print('ding')
+                            else:
+                                print('wrong')
                             self.current_word = self.current_word[-1]
                         elif event.key == pygame.K_BACKSPACE:
                             if len(self.current_word) > 1:
@@ -183,7 +183,8 @@ class Game:
                                   key_pressed != "" and \
                                     len(self.current_word) <= self.MAX_WORD_LENGTH:
                                 self.current_word += key_pressed
-                        self.lbl_current_word.update_text(self.current_word)
+                        self.lbl_current_word.change_text(self.current_word)
+                        self.lbl_current_word.rect.center = CENTER_TEXT_POS
 
                 case 2:
                     if event.type == pygame.KEYDOWN:
@@ -201,7 +202,7 @@ class Game:
                 #exit()
                 self.is_running = False
 
-#region UPDATE_FUNCTIONS 
+
     def update(self, dt):
         self._get_input()
 
@@ -228,16 +229,13 @@ class Game:
 
         ##self.lbl_current_word.change_location(CENTER_TEXT_POS)
 
-        print(self.lbl_current_word.w)
+        ## print(self.lbl_current_word.w)
 
         
     
 
     def update_gameover(self, dt) -> None:
         pass
-#endregion 
-
-#region DRAW_FUNCTIONS
 
     def draw(self):
         self.canvas.fill(BG_COLOR)
@@ -267,4 +265,3 @@ class Game:
         all_text.add(Text("Hello", "blue", (0, 0)))
         all_text.add(Text("World!", "white", (0, 50)))
         all_text.draw(self.canvas)
-#endregion 
