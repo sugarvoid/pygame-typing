@@ -1,5 +1,5 @@
 from typing import Protocol
-from pygame.display import flip
+from pygame.display import update
 
 
 class Scene(Protocol):
@@ -38,7 +38,7 @@ class SceneManager:
         if len(self.scenes) > 0:
             self.scenes[-1].render(self, screen)
         # present screen
-        flip()
+        update()
 
     def add_scene(self, scene):
         self.exitScene()

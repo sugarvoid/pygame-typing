@@ -1,8 +1,8 @@
-# timer.py
+# timer.py 0.1.0
 
 from typing import Callable
 
-class Timer():
+class Timer:
     def __init__(self, finished_time: int=1, callback: Callable=None) -> None:
         self.time = 0
         self.is_paused: bool = True
