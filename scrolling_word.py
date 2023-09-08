@@ -1,8 +1,8 @@
-# word.py
+# scrolling_word.py
 
 class Word:
     def __init__(self) -> None:
-        self.X_POS: int
+        self.y_pos: int
         self.y_pos: int
         self.value: str
 
