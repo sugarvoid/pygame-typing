@@ -1,4 +1,4 @@
-# pygame-typing-game
+# Pygame Typing Game
 
 
 A clone of a clone of a typing game I came across itch. Originally used it as an exercise to learn the [LÖVE](https://love2d.org/) framework, now using it to learn pygame.
