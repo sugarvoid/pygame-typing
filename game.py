@@ -9,7 +9,7 @@ from pygame.sprite import Group
 from pygame import KEYDOWN, K_DOWN, K_ESCAPE, K_RETURN, K_BACKSPACE
 from goodies.progress_bar import ProgressBar
 from goodies.text import Text
-from settings import FPS, GAME_SCREEN, TITLE, BG_COLOR
+from settings import FPS, GAME_SCREEN, TITLE, BG_COLOR, TEXT_COLOR, MENU_TEXT_COLOR
 from os import path, remove
 from goodies.timer import Timer
 
@@ -53,7 +53,15 @@ class Game:
         self.create_text_groups()
         self._add_text()
         self.current_word: str = ''
-        self.round_timer = ProgressBar(self.canvas, pygame.Color('gold1'),80,[10,10], None)
+        self.round_timer = ProgressBar(self.canvas, 
+                                       250, 
+                                       pygame.Color('#f2d3ab'), 
+                                       pygame.Color('#494d7e'), 
+                                       250,
+                                       [CENTER_TEXT_POS[0] - 120, 
+                                        CENTER_TEXT_POS[1] + 90], 
+                                        None)
+        
     
     def setup(self) -> None:
         self.current_word = self.get_starting_letter()
@@ -67,11 +75,11 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        self.title_text.add(Text('monogram',72, 'Typing', "white", (100, 100)))
-        self.title_text.add(Text('monogram', 72,"Game", "white", (100, 150)))
-        self.title_text.add(Text('monogram', 60, "Press Space", "white", (100, 350)))
+        self.title_text.add(Text('monogram',72, 'Typing', pygame.Color(MENU_TEXT_COLOR), (100, 100)))
+        self.title_text.add(Text('monogram', 72,"Game", pygame.Color(MENU_TEXT_COLOR), (100, 150)))
+        self.title_text.add(Text('monogram', 60, "Press Space", pygame.Color(MENU_TEXT_COLOR), (100, 350)))
 
-        self.lbl_current_word: Text = Text("monogram", 150, '', "red", (80, 350))
+        self.lbl_current_word: Text = Text("monogram", 150, '', TEXT_COLOR, (80, 350))
         self.lbl_current_word.change_location((100,30))
         self.game_text.add(self.lbl_current_word)
 
@@ -224,7 +232,8 @@ class Game:
         pass
 
     def draw_gameover(self) -> None:
+        # TODO: Finish
         all_text = Group()
         all_text.add(Text("Hello", "blue", (0, 0)))
-        all_text.add(Text("World!", "white", (0, 50)))
+        all_text.add(Text("World!", pygame.Color(MENU_TEXT_COLOR), (0, 50)))
         all_text.draw(self.canvas)
