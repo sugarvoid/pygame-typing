@@ -54,8 +54,8 @@ class Game:
         self.screen = set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
         set_caption(TITLE)
         self.load_words('word_list.txt')
-        self.create_text_groups()
-        self._add_text()
+        self._create_text_groups()
+        self._init_text()
         self.current_word: str = ''
         self.pgb_round_timer = ProgressBar(self.canvas, 
                                        250, 
@@ -71,24 +71,22 @@ class Game:
         self.lbl_current_word.change_text(self.current_word)
         self.lbl_current_word.rect.center = CENTER_TEXT_POS
 
-    def create_text_groups(self):
+    def _create_text_groups(self):
         self.title_text = Group()
         self.game_text = Group()
-        self.gameover_text = Group()
+        self.game_over_text = Group()
 
-    def _add_text(self) -> None:
-        # Title
+    def _init_text(self) -> None:
         self.title_text.add(Text(DEFAULT_FONT, 80, 'Typing', Color(MENU_TEXT_COLOR), (100, 100)))
         self.title_text.add(Text(DEFAULT_FONT, 80,"Game", Color(MENU_TEXT_COLOR), (100, 150)))
         self.title_text.add(Text(DEFAULT_FONT, 60, "Press Space", Color(MENU_TEXT_COLOR), (280, 400)))
 
-        self.lbl_current_word: Text = Text("monogram", 150, '', TEXT_COLOR, (80, 350))
-        self.lbl_current_word.change_location((100,30))
+        self.lbl_current_word: Text = Text("monogram", 150, '', TEXT_COLOR, (100, 30))
         self.game_text.add(self.lbl_current_word)
 
-        self.game_over_text = Group()
-        self.game_over_text.add(Text(DEFAULT_FONT, 80, "Game", Color(MENU_TEXT_COLOR), (0, 0)))
-        self.game_over_text.add(Text(DEFAULT_FONT, 80, "Over", Color(MENU_TEXT_COLOR), (0, 50)))
+        
+        self.game_over_text.add(Text(DEFAULT_FONT, 110, "Game", Color(MENU_TEXT_COLOR), (90, 200)))
+        self.game_over_text.add(Text(DEFAULT_FONT, 110, "Over", Color(MENU_TEXT_COLOR), (90, 260)))
 
     #TODO: Load txt list into a python list. So you don't need to load it each time?
     def search_for_word(self, word:str) -> bool:
