@@ -1,16 +1,23 @@
+from os import path, remove
 from random import randint
-import string
-import pygame
+from string import ascii_lowercase
+
+from settings import FPS, GAME_SCREEN, TITLE, BG_COLOR, TEXT_COLOR, MENU_TEXT_COLOR
+
+import pygame.time
+import pygame.event
+import pygame.display
+
 from pygame import init
 from pygame import Clock, Surface, Color
-import pygame.time
+from pygame import KEYDOWN, K_ESCAPE, K_RETURN, K_BACKSPACE, K_r, QUIT, K_SPACE
+
 from pygame.display import set_mode, set_caption
 from pygame.sprite import Group
-from pygame import KEYDOWN, K_DOWN, K_ESCAPE, K_RETURN, K_BACKSPACE
+
 from goodies.progress_bar import ProgressBar
 from goodies.text import Text
-from settings import FPS, GAME_SCREEN, TITLE, BG_COLOR, TEXT_COLOR, MENU_TEXT_COLOR
-from os import path, remove
+
 
 
 
@@ -54,8 +61,8 @@ class Game:
         self.current_word: str = ''
         self.pgb_round_timer = ProgressBar(self.canvas, 
                                        250, 
-                                       pygame.Color('#f2d3ab'), 
-                                       pygame.Color('#494d7e'), 
+                                       Color('#f2d3ab'), 
+                                       Color('#494d7e'), 
                                        250,
                                        [CENTER_TEXT_POS[0] - 120, 
                                         CENTER_TEXT_POS[1] + 90], 
@@ -74,9 +81,9 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        self.title_text.add(Text(DEFAULT_FONT,80, 'Typing', pygame.Color(MENU_TEXT_COLOR), (100, 100)))
-        self.title_text.add(Text(DEFAULT_FONT, 80,"Game", pygame.Color(MENU_TEXT_COLOR), (100, 150)))
-        self.title_text.add(Text(DEFAULT_FONT, 60, "Press Space", pygame.Color(MENU_TEXT_COLOR), (280, 400)))
+        self.title_text.add(Text(DEFAULT_FONT, 80, 'Typing', Color(MENU_TEXT_COLOR), (100, 100)))
+        self.title_text.add(Text(DEFAULT_FONT, 80,"Game", Color(MENU_TEXT_COLOR), (100, 150)))
+        self.title_text.add(Text(DEFAULT_FONT, 60, "Press Space", Color(MENU_TEXT_COLOR), (280, 400)))
 
         self.lbl_current_word: Text = Text("monogram", 150, '', TEXT_COLOR, (80, 350))
         self.lbl_current_word.change_location((100,30))
@@ -98,7 +105,7 @@ class Game:
 
         while not usable_letter:
             index = randint(0, 25)
-            letter = string.ascii_lowercase[index]
+            letter = ascii_lowercase[index]
             if letter not in LETTERS_TO_AVOID:
                 usable_letter = True
 
@@ -145,13 +152,13 @@ class Game:
             self._check_for_quit(event)
             match self.state:
                 case 0: # Title Screen
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_SPACE:
+                    if event.type == KEYDOWN:
+                        if event.key == K_SPACE:
                             self.state = 1
 
                 case 1:
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_RETURN:
+                    if event.type == KEYDOWN:
+                        if event.key == K_RETURN:
                             print(f'submitting {self.current_word}.')
                             # TODO: Submit word()
                             if self.is_valid_word(self.current_word):
@@ -160,7 +167,7 @@ class Game:
                             else:
                                 print('wrong')
                             self.current_word = self.current_word[-1]
-                        elif event.key == pygame.K_BACKSPACE:
+                        elif event.key == K_BACKSPACE:
                             if len(self.current_word) > 1:
                                 self.current_word = self.current_word[:-1]
                         else:
@@ -173,13 +180,13 @@ class Game:
                         self.lbl_current_word.rect.center = CENTER_TEXT_POS
 
                 case 2:
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_r:
+                    if event.type == KEYDOWN:
+                        if event.key == K_r:
                             # TODO: Restart game
                             print('Restart the game')
 
     def _check_for_quit(self, event) -> None:
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
                 #exit()
                 self.is_running = False
         elif event.type == KEYDOWN:
@@ -232,5 +239,5 @@ class Game:
         # TODO: Finish
         all_text = Group()
         all_text.add(Text("Hello", "blue", (0, 0)))
-        all_text.add(Text("World!", pygame.Color(MENU_TEXT_COLOR), (0, 50)))
+        all_text.add(Text("World!", Color(MENU_TEXT_COLOR), (0, 50)))
         all_text.draw(self.canvas)
