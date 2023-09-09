@@ -2,9 +2,11 @@ from random import randint
 import string
 import pygame
 from pygame import init
-from pygame import Clock, Surface
+from pygame import Clock, Surface, Color
+import pygame.time
 from pygame.display import set_mode, set_caption
 from pygame.sprite import Group
+from pygame import KEYDOWN, K_DOWN, K_ESCAPE, K_RETURN, K_BACKSPACE
 from goodies.progress_bar import ProgressBar
 from goodies.text import Text
 from settings import FPS, GAME_SCREEN, TITLE, BG_COLOR
@@ -174,8 +176,8 @@ class Game:
         if event.type == pygame.QUIT:
                 #exit()
                 self.is_running = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
+        elif event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
                 #exit()
                 self.is_running = False
 
@@ -222,7 +224,7 @@ class Game:
         pass
 
     def draw_gameover(self) -> None:
-        all_text = pygame.sprite.Group()
+        all_text = Group()
         all_text.add(Text("Hello", "blue", (0, 0)))
         all_text.add(Text("World!", "white", (0, 50)))
         all_text.draw(self.canvas)
