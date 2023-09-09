@@ -64,7 +64,7 @@ class Game:
                                        250,
                                        [CENTER_TEXT_POS[0] - 120, 
                                         CENTER_TEXT_POS[1] + 90], 
-                                        None)
+                                        self.go_to_gameover)
         
     def setup(self) -> None:
         self.current_word = self.get_starting_letter()
@@ -85,6 +85,10 @@ class Game:
         self.lbl_current_word: Text = Text("monogram", 150, '', TEXT_COLOR, (80, 350))
         self.lbl_current_word.change_location((100,30))
         self.game_text.add(self.lbl_current_word)
+
+        self.game_over_text = Group()
+        self.game_over_text.add(Text(DEFAULT_FONT, 80, "Game", Color(MENU_TEXT_COLOR), (0, 0)))
+        self.game_over_text.add(Text(DEFAULT_FONT, 80, "Over", Color(MENU_TEXT_COLOR), (0, 50)))
 
     #TODO: Load txt list into a python list. So you don't need to load it each time?
     def search_for_word(self, word:str) -> bool:
@@ -163,6 +167,7 @@ class Game:
                                 self.pgb_round_timer.reset()
                             else:
                                 print('wrong')
+                                self.go_to_gameover()
                             self.current_word = self.current_word[-1]
                         elif event.key == K_BACKSPACE:
                             if len(self.current_word) > 1:
@@ -233,8 +238,9 @@ class Game:
         pass
 
     def draw_gameover(self) -> None:
-        # TODO: Finish
-        all_text = Group()
-        all_text.add(Text("Hello", "blue", (0, 0)))
-        all_text.add(Text("World!", Color(MENU_TEXT_COLOR), (0, 50)))
-        all_text.draw(self.canvas)
+        self.game_over_text.draw(self.canvas)
+    
+    def go_to_gameover(self) -> None:
+        if self.state == 2:
+            return
+        self.state = 2
