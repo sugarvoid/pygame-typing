@@ -1,6 +1,5 @@
 from pygame import Vector2
 
-
 GAME_SCREEN: Vector2 = Vector2(800,600)
 TITLE = 'Pygame - Typing Game'
 SCALE = 6

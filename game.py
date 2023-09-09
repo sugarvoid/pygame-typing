@@ -33,14 +33,12 @@ class Game:
     def __init__(self) -> None:
 
         init()
-
         self.MAX_WORD_LENGTH: int = 13
         self.word_list: list = []
         self.used_words: list = []
         self.used_words_txt = open(USED_WORDS_FILE, 'a+')
         self.valid_words: list = self.load_words('word_list.txt')
         
-
         if DEBUG:
             print('debug on')
             if path.exists(USED_WORDS_FILE):
@@ -68,7 +66,6 @@ class Game:
                                         CENTER_TEXT_POS[1] + 90], 
                                         None)
         
-    
     def setup(self) -> None:
         self.current_word = self.get_starting_letter()
         self.lbl_current_word.change_text(self.current_word)

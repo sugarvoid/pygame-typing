@@ -2,7 +2,6 @@
 
 from typing import Callable
 
-
 # test_timer: Timer = Timer(5)
 
 class Timer:

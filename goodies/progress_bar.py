@@ -6,7 +6,6 @@ from typing import Callable
 from goodies.mathy import clamp
 
 class ProgressBar:
-
     def __init__(self, surface, length, color, under_color, max_val, pos:tuple, callback: Callable) -> None:
         self.surface = surface
         self.color = color
@@ -25,7 +24,6 @@ class ProgressBar:
         self.lower_rate = self.bar_length/3
     
     def update(self, dt):
-        
         self.bar_length = clamp((self.bar_length - self.lower_rate * dt), 0, self.max_val)
         self.rect.width = self.bar_length
         if self.bar_length == 0:
