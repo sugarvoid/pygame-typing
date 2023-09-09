@@ -10,7 +10,7 @@ A clone of a clone of a typing game I came across itch. Originally used it as an
 
 ## Credit
 
-### Orginal Game
+### Original Game
 - [Word Chain](https://mantequilla525.itch.io/word-chain) by [mantequilla525](https://mantequilla525.itch.io/)
 
 ### Font
