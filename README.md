@@ -25,3 +25,10 @@ A clone of a clone of a typing game I came across itch. Originally used it as an
 
 ### Color Palette
 - [Oli 6](https://lospec.com/palette-list/oil-6) by GrafxKid
+
+
+### Features To Add
+
+- [ ] Score
+- [ ] Game over screen
+- [ ] Scroll used works in game over screen
