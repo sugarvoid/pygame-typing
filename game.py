@@ -11,15 +11,15 @@ from goodies.progress_bar import ProgressBar
 from goodies.text import Text
 from settings import FPS, GAME_SCREEN, TITLE, BG_COLOR, TEXT_COLOR, MENU_TEXT_COLOR
 from os import path, remove
-from goodies.timer import Timer
+
 
 
 LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
-
 DEBUG: bool = False
 USED_WORDS_FILE: str = 'word_history.txt'
 CENTER_TEXT_POS = (GAME_SCREEN.x/2, GAME_SCREEN.y/2)
 LETTERS_TO_AVOID: list = ['x', 'q', 'u', 'z', 'w', 'y', 'i', 'v'] # For starting letter 
+DEFAULT_FONT = 'monogram'
 
 
 class Game:
@@ -32,7 +32,6 @@ class Game:
         self.used_words: list = []
         self.used_words_txt = open(USED_WORDS_FILE, 'a+')
         self.valid_words: list = self.load_words('word_list.txt')
-        self.test_timer: Timer = Timer(5)
         
 
         if DEBUG:
@@ -53,7 +52,7 @@ class Game:
         self.create_text_groups()
         self._add_text()
         self.current_word: str = ''
-        self.round_timer = ProgressBar(self.canvas, 
+        self.pgb_round_timer = ProgressBar(self.canvas, 
                                        250, 
                                        pygame.Color('#f2d3ab'), 
                                        pygame.Color('#494d7e'), 
@@ -75,9 +74,9 @@ class Game:
 
     def _add_text(self) -> None:
         # Title
-        self.title_text.add(Text('monogram',72, 'Typing', pygame.Color(MENU_TEXT_COLOR), (100, 100)))
-        self.title_text.add(Text('monogram', 72,"Game", pygame.Color(MENU_TEXT_COLOR), (100, 150)))
-        self.title_text.add(Text('monogram', 60, "Press Space", pygame.Color(MENU_TEXT_COLOR), (100, 350)))
+        self.title_text.add(Text(DEFAULT_FONT,80, 'Typing', pygame.Color(MENU_TEXT_COLOR), (100, 100)))
+        self.title_text.add(Text(DEFAULT_FONT, 80,"Game", pygame.Color(MENU_TEXT_COLOR), (100, 150)))
+        self.title_text.add(Text(DEFAULT_FONT, 60, "Press Space", pygame.Color(MENU_TEXT_COLOR), (280, 400)))
 
         self.lbl_current_word: Text = Text("monogram", 150, '', TEXT_COLOR, (80, 350))
         self.lbl_current_word.change_location((100,30))
@@ -148,9 +147,7 @@ class Game:
                 case 0: # Title Screen
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
-                            self.title_text.empty()
                             self.state = 1
-                            self.test_timer.start()
 
                 case 1:
                     if event.type == pygame.KEYDOWN:
@@ -159,6 +156,7 @@ class Game:
                             # TODO: Submit word()
                             if self.is_valid_word(self.current_word):
                                 print('ding')
+                                self.pgb_round_timer.reset()
                             else:
                                 print('wrong')
                             self.current_word = self.current_word[-1]
@@ -200,14 +198,13 @@ class Game:
             case 2: # Gameover
                 self.update_gameover(dt)
         pygame.display.flip()  # Refresh on-screen display
-        self.clock.tick(FPS) # wait until next frame (at 60 FPS)
+        self.clock.tick(FPS) # wait until next frame
 
     def update_title(self) -> None:
         pass
 
     def update_play(self, dt) -> None:
-        self.test_timer.update(dt)
-        self.round_timer.update(dt)
+        self.pgb_round_timer.update(dt)
 
     def update_gameover(self, dt) -> None:
         pass
@@ -218,8 +215,8 @@ class Game:
             case 0:
                 self.draw_title()
             case 1:
-                self.round_timer.draw()
                 self.game_text.draw(self.canvas)
+                self.pgb_round_timer.draw()
             case 2:
                 self.draw_gameover()
  

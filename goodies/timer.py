@@ -2,6 +2,9 @@
 
 from typing import Callable
 
+
+# test_timer: Timer = Timer(5)
+
 class Timer:
     def __init__(self, finished_time: int=1, callback: Callable=None) -> None:
         self.time = 0
