@@ -2,12 +2,12 @@ from random import randint
 import string
 import pygame
 from pygame import init
+from pygame import Clock, Surface
+from pygame.display import set_mode, set_caption
 from pygame.sprite import Group
 from goodies.progress_bar import ProgressBar
 from goodies.text import Text
-from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH,\
-                     GAME_SCREEN, TITLE, BG_COLOR
-
+from settings import FPS, GAME_SCREEN, TITLE, BG_COLOR
 from os import path, remove
 from goodies.timer import Timer
 
@@ -30,7 +30,6 @@ class Game:
         self.used_words: list = []
         self.used_words_txt = open(USED_WORDS_FILE, 'a+')
         self.valid_words: list = self.load_words('word_list.txt')
-
         self.test_timer: Timer = Timer(5)
         
 
@@ -42,30 +41,18 @@ class Game:
                 print("The file does not exist") 
 
         self.dt: float = 0
-        self.clock: pygame.Clock = pygame.time.Clock()
+        self.clock: Clock = pygame.time.Clock()
         self.is_running: bool = True
         self.state: int = 0 # 0=title, 1=play, 2=game_over
-        self.canvas = pygame.Surface((GAME_SCREEN.x,GAME_SCREEN.y))
-        self.screen = pygame.display.set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
-        pygame.display.set_caption(TITLE)
-
-        
-
+        self.canvas = Surface((GAME_SCREEN.x,GAME_SCREEN.y))
+        self.screen = set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
+        set_caption(TITLE)
         self.load_words('word_list.txt')
-
-
         self.create_text_groups()
-        
-
         self._add_text()
-
-
-
         self.current_word: str = ''
         self.round_timer = ProgressBar(self.canvas, pygame.Color('gold1'),80,[10,10], None)
     
-
-
     def setup(self) -> None:
         self.current_word = self.get_starting_letter()
         self.lbl_current_word.change_text(self.current_word)
@@ -73,8 +60,8 @@ class Game:
 
     def create_text_groups(self):
         self.title_text = Group()
-        self.game_text = pygame.sprite.Group()
-        self.gameover_text = pygame.sprite.Group()
+        self.game_text = Group()
+        self.gameover_text = Group()
 
     def _add_text(self) -> None:
         # Title
@@ -85,14 +72,6 @@ class Game:
         self.lbl_current_word: Text = Text("monogram", 150, '', "red", (80, 350))
         self.lbl_current_word.change_location((100,30))
         self.game_text.add(self.lbl_current_word)
-
-        
-    
-
-        # Gameplay
-        
-        # Game Over
-
 
     #TODO: Load txt list into a python list. So you don't need to load it each time?
     def search_for_word(self, word:str) -> bool:
@@ -127,7 +106,6 @@ class Game:
                 break
         myfile.close() 
         return word_list
-
 
     def is_new_word(self, word: str) -> bool:
         used_words = self.load_words(USED_WORDS_FILE)
@@ -192,7 +170,6 @@ class Game:
                             # TODO: Restart game
                             print('Restart the game')
 
-
     def _check_for_quit(self, event) -> None:
         if event.type == pygame.QUIT:
                 #exit()
@@ -201,7 +178,6 @@ class Game:
             if event.key == pygame.K_ESCAPE:
                 #exit()
                 self.is_running = False
-
 
     def update(self, dt):
         self._get_input()
@@ -216,23 +192,12 @@ class Game:
         pygame.display.flip()  # Refresh on-screen display
         self.clock.tick(FPS) # wait until next frame (at 60 FPS)
 
-    
     def update_title(self) -> None:
         pass
-
 
     def update_play(self, dt) -> None:
         self.test_timer.update(dt)
         self.round_timer.update(dt)
-
-        
-
-        ##self.lbl_current_word.change_location(CENTER_TEXT_POS)
-
-        ## print(self.lbl_current_word.w)
-
-        
-    
 
     def update_gameover(self, dt) -> None:
         pass
@@ -248,17 +213,13 @@ class Game:
             case 2:
                 self.draw_gameover()
  
-
         self.screen.blit(self.canvas,(0,0))
         
-            
-    
     def draw_title(self) -> None:
         self.title_text.draw(self.canvas)
 
     def draw_play(self) -> None:
         pass
-    
 
     def draw_gameover(self) -> None:
         all_text = pygame.sprite.Group()

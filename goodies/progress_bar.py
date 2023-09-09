@@ -26,9 +26,7 @@ class ProgressBar:
         self.bar_length = clamp((self.bar_length - 20 * dt), 0, self.max_val)
         self.rect.width = self.bar_length
         if self.bar_length == 0:
-            pass
-            #self.callback()
-        # print(int(self.bar_length))
+            self.callback()
     
     def draw(self):
         pygame.draw.rect(self.surface, self.under_color, self.rect_under)
