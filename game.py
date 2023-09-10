@@ -25,7 +25,7 @@ LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
 DEBUG: bool = False
 USED_WORDS_FILE: str = 'word_history.txt'
 CENTER_TEXT_POS = (GAME_SCREEN.x/2, GAME_SCREEN.y/2)
-LETTERS_TO_AVOID: list = ['x', 'q', 'u', 'z', 'w', 'y', 'i', 'v'] # For starting letter 
+LETTERS_TO_AVOID: list = ['o','x', 'q', 'u', 'z', 'w', 'y', 'i', 'v'] # For starting letter 
 DEFAULT_FONT = 'monogram'
 
 
