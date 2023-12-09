@@ -70,6 +70,7 @@ class Game:
                     x, y = event.pos
                     self.square1.check_mouse_hover(x, y)
                     self.square2.check_mouse_hover(x, y)
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         print(f'left click on {event.pos}')
