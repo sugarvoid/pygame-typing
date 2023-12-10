@@ -15,11 +15,11 @@ class Tween:
         self.finished_callback = finished_callback
 
     def start(self):
+        print('i started!!!!!!!!!!!!!!!!!!!!!')
         self.current_frame = 0
         self.current_values = deepcopy(self.start_values)
 
     def update(self):
-        print(self.current_values)
         if not self.finished: 
             
             t = self.current_frame / self.frame_count
@@ -33,7 +33,7 @@ class Tween:
             if self.current_frame > self.frame_count and self.finished_callback:
                 self.finished_callback()
                 self.current_values = self.final_values
-                self.finished + True
+                self.finished = True
 
         return self.current_values
 
@@ -74,21 +74,21 @@ while running:
             tween.start()  # Start the tween when space key is pressed
             tween_started = True
 
-    if tween_started:
-        # Update Tween
-        current_pos = [int(value) for value in tween.update()]
+    
+    # Update Tween
+    current_pos = [int(value) for value in tween.update()]
 
-        # Draw background
-        screen.fill(WHITE)
+    # Draw background
+    screen.fill(WHITE)
 
-        # Draw the square at the current position
-        pygame.draw.rect(screen, (0, 128, 255), (current_pos[0], current_pos[1], square_size, square_size))
+    # Draw the square at the current position
+    pygame.draw.rect(screen, (0, 128, 255), (current_pos[0], current_pos[1], square_size, square_size))
 
-        # Update the display
-        pygame.display.flip()
+    # Update the display
+    pygame.display.flip()
 
-        # Cap the frame rate
-        clock.tick(FPS)
+    # Cap the frame rate
+    clock.tick(FPS)
 
 # Quit Pygame
 pygame.quit()
