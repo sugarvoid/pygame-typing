@@ -19,59 +19,89 @@ from goodies.progress_bar import ProgressBar
 from goodies.text import Text
 
 
-
-
-LETTERS: str = 'QWERTYUIOPASDFGHJKLZXCVBNM'
+LETTERS: str = "QWERTYUIOPASDFGHJKLZXCVBNM"
 DEBUG: bool = False
-USED_WORDS_FILE: str = 'word_history.txt'
-CENTER_TEXT_POS = (GAME_SCREEN.x/2, GAME_SCREEN.y/2)
-LETTERS_TO_AVOID: list = ['o','x', 'q', 'u', 'z', 'w', 'y', 'i', 'v'] # For starting letter 
-DEFAULT_FONT = 'monogram'
+USED_WORDS_FILE: str = "word_history.txt"
+CENTER_TEXT_POS = (GAME_SCREEN.x / 2, GAME_SCREEN.y / 2)
+LETTERS_TO_AVOID: list = [
+    "o",
+    "x",
+    "q",
+    "u",
+    "z",
+    "w",
+    "y",
+    "i",
+    "v",
+]  # For starting letter
+DEFAULT_FONT = "monogram"
 LETTER_VALUES = {
-    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4,
-    'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3,
-    'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8,
-    'y': 4, 'z': 10
+    "a": 1,
+    "b": 3,
+    "c": 3,
+    "d": 2,
+    "e": 1,
+    "f": 4,
+    "g": 2,
+    "h": 4,
+    "i": 1,
+    "j": 8,
+    "k": 5,
+    "l": 1,
+    "m": 3,
+    "n": 1,
+    "o": 1,
+    "p": 3,
+    "q": 10,
+    "r": 1,
+    "s": 1,
+    "t": 1,
+    "u": 1,
+    "v": 4,
+    "w": 4,
+    "x": 8,
+    "y": 4,
+    "z": 10,
 }
 
 
 class Game:
     def __init__(self) -> None:
-
         init()
         self.MAX_WORD_LENGTH: int = 13
         self.word_list: list = []
         self.used_words: list = []
-        self.used_words_txt = open(USED_WORDS_FILE, 'a+')
-        self.valid_words: list = self.load_words('word_list.txt')
-        
+        self.used_words_txt = open(USED_WORDS_FILE, "a+")
+        self.valid_words: list = self.load_words("word_list.txt")
+
         if DEBUG:
-            print('debug on')
+            print("debug on")
             if path.exists(USED_WORDS_FILE):
                 remove(USED_WORDS_FILE)
             else:
-                print("The file does not exist") 
+                print("The file does not exist")
 
         self.dt: float = 0
         self.clock: Clock = pygame.time.Clock()
         self.is_running: bool = True
-        self.state: int = 0 # 0=title, 1=play, 2=game_over
-        self.canvas = Surface((GAME_SCREEN.x,GAME_SCREEN.y))
+        self.state: int = 0  # 0=title, 1=play, 2=game_over
+        self.canvas = Surface((GAME_SCREEN.x, GAME_SCREEN.y))
         self.screen = set_mode((GAME_SCREEN.x, GAME_SCREEN.y))
         set_caption(TITLE)
-        self.load_words('word_list.txt')
+        self.load_words("word_list.txt")
         self._create_text_groups()
         self._init_text()
-        self.current_word: str = ''
-        self.pgb_round_timer = ProgressBar(self.canvas, 
-                                       250, 
-                                       Color('#f2d3ab'), 
-                                       Color('#494d7e'), 
-                                       250,
-                                       [CENTER_TEXT_POS[0] - 120, 
-                                        CENTER_TEXT_POS[1] + 90], 
-                                        self.go_to_gameover)
-        
+        self.current_word: str = ""
+        self.pgb_round_timer = ProgressBar(
+            self.canvas,
+            250,
+            Color("#f2d3ab"),
+            Color("#494d7e"),
+            250,
+            [CENTER_TEXT_POS[0] - 120, CENTER_TEXT_POS[1] + 90],
+            self.go_to_gameover,
+        )
+
     def setup(self) -> None:
         self.current_word = self.get_starting_letter()
         self.lbl_current_word.change_text(self.current_word)
@@ -83,20 +113,29 @@ class Game:
         self.game_over_text = Group()
 
     def _init_text(self) -> None:
-        self.title_text.add(Text(DEFAULT_FONT, 80, 'Typing', Color(MENU_TEXT_COLOR), (100, 100)))
-        self.title_text.add(Text(DEFAULT_FONT, 80,"Game", Color(MENU_TEXT_COLOR), (100, 150)))
-        self.title_text.add(Text(DEFAULT_FONT, 60, "Press Space", Color(MENU_TEXT_COLOR), (280, 400)))
+        self.title_text.add(
+            Text(DEFAULT_FONT, 80, "Typing", Color(MENU_TEXT_COLOR), (100, 100))
+        )
+        self.title_text.add(
+            Text(DEFAULT_FONT, 80, "Game", Color(MENU_TEXT_COLOR), (100, 150))
+        )
+        self.title_text.add(
+            Text(DEFAULT_FONT, 60, "Press Space", Color(MENU_TEXT_COLOR), (280, 400))
+        )
 
-        self.lbl_current_word: Text = Text("monogram", 150, '', TEXT_COLOR, (100, 30))
+        self.lbl_current_word: Text = Text("monogram", 150, "", TEXT_COLOR, (100, 30))
         self.game_text.add(self.lbl_current_word)
 
-        
-        self.game_over_text.add(Text(DEFAULT_FONT, 110, "Game", Color(MENU_TEXT_COLOR), (90, 200)))
-        self.game_over_text.add(Text(DEFAULT_FONT, 110, "Over", Color(MENU_TEXT_COLOR), (90, 260)))
+        self.game_over_text.add(
+            Text(DEFAULT_FONT, 110, "Game", Color(MENU_TEXT_COLOR), (90, 200))
+        )
+        self.game_over_text.add(
+            Text(DEFAULT_FONT, 110, "Over", Color(MENU_TEXT_COLOR), (90, 260))
+        )
 
-    #TODO: Load txt list into a python list. So you don't need to load it each time?
-    def search_for_word(self, word:str) -> bool:
-        has_word: bool 
+    # TODO: Load txt list into a python list. So you don't need to load it each time?
+    def search_for_word(self, word: str) -> bool:
+        has_word: bool
         for w in self.word_list:
             if w == word:
                 has_word = True
@@ -104,7 +143,7 @@ class Game:
             else:
                 has_word = False
         return has_word
-    
+
     def get_starting_letter(self) -> chr:
         usable_letter: bool = False
 
@@ -120,12 +159,12 @@ class Game:
         word_list = []
         myfile = open(file_name, "r")
         while myfile:
-            line  = myfile.readline()
+            line = myfile.readline()
             if line != "":
-                word_list.append(line.strip('\n'))
+                word_list.append(line.strip("\n"))
             else:
                 break
-        myfile.close() 
+        myfile.close()
         return word_list
 
     def is_new_word(self, word: str) -> bool:
@@ -135,7 +174,7 @@ class Game:
         else:
             return False
 
-    def is_valid_word(self, word:str) -> bool:
+    def is_valid_word(self, word: str) -> bool:
         word = word.strip().lower()
         has_word: bool = False
         for w in self.valid_words:
@@ -148,29 +187,30 @@ class Game:
 
     def run_game(self) -> None:
         while self.is_running:
-            dt = self.clock.tick(60)/1000.0
+            dt = self.clock.tick(60) / 1000.0
             self.update(dt)
             self.draw()
-    
+
     def _get_input(self) -> None:
         for event in pygame.event.get():
             self._check_for_quit(event)
             match self.state:
-                case 0: # Title Screen
+                case 0:  # Title Screen
                     if event.type == KEYDOWN:
                         if event.key == K_SPACE:
                             self.state = 1
+                            self.pgb_round_timer.reset()
 
                 case 1:
                     if event.type == KEYDOWN:
                         if event.key == K_RETURN:
-                            print(f'submitting {self.current_word}.')
+                            print(f"submitting {self.current_word}.")
                             # TODO: Submit word()
                             if self.is_valid_word(self.current_word):
-                                # TODO: Add ding sound 
+                                # TODO: Add ding sound
                                 self.pgb_round_timer.reset()
                             else:
-                                print('wrong')
+                                print("wrong")
                                 self.go_to_gameover()
                             self.current_word = self.current_word[-1]
                         elif event.key == K_BACKSPACE:
@@ -178,9 +218,11 @@ class Game:
                                 self.current_word = self.current_word[:-1]
                         else:
                             key_pressed = event.unicode.upper()
-                            if key_pressed in LETTERS and \
-                                  key_pressed != "" and \
-                                    len(self.current_word) <= self.MAX_WORD_LENGTH:
+                            if (
+                                key_pressed in LETTERS
+                                and key_pressed != ""
+                                and len(self.current_word) <= self.MAX_WORD_LENGTH
+                            ):
                                 self.current_word += key_pressed
                         self.lbl_current_word.change_text(self.current_word)
                         self.lbl_current_word.rect.center = CENTER_TEXT_POS
@@ -189,29 +231,31 @@ class Game:
                     if event.type == KEYDOWN:
                         if event.key == K_r:
                             # TODO: Restart game
-                            print('Restart the game')
+                            print("Restart the game")
+                            self.setup()
+                            self.state = 0
 
     def _check_for_quit(self, event) -> None:
         if event.type == QUIT:
-                #exit()
-                self.is_running = False
+            # exit()
+            self.is_running = False
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE:
-                #exit()
+                # exit()
                 self.is_running = False
 
     def update(self, dt):
         self._get_input()
 
         match self.state:
-            case 0: # Title
+            case 0:  # Title
                 self.update_title()
-            case 1: # Gameplay
+            case 1:  # Gameplay
                 self.update_play(dt)
-            case 2: # Gameover
+            case 2:  # Gameover
                 self.update_gameover(dt)
         pygame.display.flip()  # Refresh on-screen display
-        self.clock.tick(FPS) # wait until next frame
+        self.clock.tick(FPS)  # wait until next frame
 
     def update_title(self) -> None:
         pass
@@ -232,9 +276,9 @@ class Game:
                 self.pgb_round_timer.draw()
             case 2:
                 self.draw_gameover()
- 
-        self.screen.blit(self.canvas,(0,0))
-        
+
+        self.screen.blit(self.canvas, (0, 0))
+
     def draw_title(self) -> None:
         self.title_text.draw(self.canvas)
 
@@ -243,7 +287,7 @@ class Game:
 
     def draw_gameover(self) -> None:
         self.game_over_text.draw(self.canvas)
-    
+
     def go_to_gameover(self) -> None:
         if self.state == 2:
             return
