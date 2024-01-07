@@ -34,3 +34,5 @@ A clone of a clone of a typing game I came across itch. Originally used it as an
 -   [ ] Score
 -   [x] Game over screen
 -   [ ] Scroll used works in game over screen
+-   [ ] Music
+-   [ ] Sound effects
